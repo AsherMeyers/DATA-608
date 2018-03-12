@@ -13,7 +13,7 @@ library(dplyr)
 library(ggplot2)
 
 
-raw <- read.csv("C:/Users/asher/Documents/GitHub/CUNY-DATA-608/module3/mortality.csv")
+raw <- read.csv("https://raw.githubusercontent.com/AsherMeyers/DATA-608/master/module3/mortality.csv")
 df <- subset(raw, raw$ICD.Chapter != unique(raw$ICD.Chapter)[18])
 df$ICD.Chapter <- factor(df$ICD.Chapter) #Refactor to remove Codes for special purposes level 
 
