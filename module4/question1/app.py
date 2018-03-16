@@ -19,6 +19,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import datetime
+from datetime import datetime as dt
 import plotly.graph_objs as go
 from colour import Color
 
@@ -130,7 +131,7 @@ def generate_table(userdate): #place
     
     #dataframe = df[(df.Site == place) & ((df.Date == date2) | (df.Date == date1))]
     #dataframe = dataframe.sort_values(by='Date')
-    dataframe = CleanSites(userdate)
+    dataframe = CleanSites(userdate, n=75)
     
     return html.Table(
         # Header
@@ -153,18 +154,27 @@ for i in range(len(df1)): colors[i] = colorlist[i].hex_l
 
 app.layout = html.Div(children=[
             dcc.DatePickerSingle(
-        id='my-date-picker-single',
+        id='id-datepicker',
         min_date_allowed=start,
         max_date_allowed=end,
         initial_visible_month=dt(2010, 1, 1),
-        date=dt(2010, 1, 1),
-        
-        dcc.Graph(
-        id='Clean Sites',
-        figure={
-            'data': [
-                    
-                go.Bar(
+        date=dt(2010, 1, 1)), 
+        html.Div(id='div-datepicker'),
+    html.H4(children='Clean Sites'),
+    generate_table(userdate)
+])
+
+
+@app.callback(
+    dash.dependencies.Output(component_id='div-datepicker', 
+                             component_property='children'),
+    [dash.dependencies.Input(component_id='id-datepicker', 
+                             component_property='date')]
+)
+def update_output(date):
+    #date = dt.strptime(date, '%Y-%m-%d')
+    df1 = CleanSites(dt.strptime(date, '%Y-%m-%d'))
+    trace = go.Bar(
                     y=list(df1.Site),
                     x=list(df1.EnteroCount),
                     
@@ -182,7 +192,7 @@ app.layout = html.Div(children=[
                     #},
                     #name=i
                 ) #for i in df1.continent.unique()
-            ],
+    return {'data': trace,
             'layout': go.Layout(
                 yaxis={'title': 'Site'}, #'type': 'log',
                 xaxis={'title': 'Estimated Entero Count'},
@@ -192,13 +202,7 @@ app.layout = html.Div(children=[
                 font={'size':8}#,
                 #titlefont={'size':24}
             )
-        }
-    ),
-    html.H4(children='Clean Sites'),
-    generate_table(userdate, 75)
-])
-    
-
+            }
 
 
 if __name__ == '__main__':
