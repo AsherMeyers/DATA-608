@@ -1,4 +1,4 @@
-Cities,LatestYear,URL,YearsAvailable
+Name,LatestYear,URL,YearsAvailable
 Adelanto,2016,https://transcal.s3.amazonaws.com/public/export/Adelanto-2016.csv,"2016, 2015, 2014, 2013, 2012, 2011"
 Agoura-Hills,2016,https://transcal.s3.amazonaws.com/public/export/Agoura-Hills-2016.csv,"2016, 2015, 2014, 2013, 2012, 2011"
 Alameda,2016,https://transcal.s3.amazonaws.com/public/export/Alameda-2016.csv,"2016, 2015, 2014, 2013, 2012, 2011"
