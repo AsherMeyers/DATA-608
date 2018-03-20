@@ -412,7 +412,7 @@ South-Lake-Tahoe,https://transcal.s3.amazonaws.com/public/export/south-lake-taho
 South-Pasadena,https://transcal.s3.amazonaws.com/public/export/south-pasadena-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
 South-San-Francisco,https://transcal.s3.amazonaws.com/public/export/south-san-francisco-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
 Stanton,https://transcal.s3.amazonaws.com/public/export/stanton-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
-St.-Helena,https://transcal.s3.amazonaws.com/public/export/st.-helena-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
+St-Helena,https://transcal.s3.amazonaws.com/public/export/st-helena-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
 Stockton,https://transcal.s3.amazonaws.com/public/export/stockton-2016.csv,2016,"2016, 2015, 2014, 2013, 2012"
 Suisun-City,https://transcal.s3.amazonaws.com/public/export/suisun-city-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
 Sunnyvale,https://transcal.s3.amazonaws.com/public/export/sunnyvale-2016.csv,2016,"2016, 2015, 2014, 2013, 2012, 2011"
