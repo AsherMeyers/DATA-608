@@ -137,10 +137,11 @@ df1 = CleanSites(userdate)
 
 
 app = dash.Dash()
-orange = Color("orange")
-colorlist = list(orange.range_to(Color("blue"),len(df1)))
-colors = len(df1)*[None]
-for i in range(len(df1)): colors[i] = colorlist[i].hex_l
+
+#orange = Color("orange")
+#colorlist = list(orange.range_to(Color("blue"),len(df1)))
+#colors = len(df1)*[None]
+#for i in range(len(df1)): colors[i] = colorlist[i].hex_l
 
 app.layout = html.Div([
         dcc.DatePickerSingle(
@@ -150,23 +151,18 @@ app.layout = html.Div([
         initial_visible_month=pd.to_datetime("2010-1-1"),
         date=pd.to_datetime("2010-1-1")), 
         #html.Div(id='div-datepicker'),
-    #dcc.Graph(id='indicator-graphic'),
-    html.Div(id='output-container-date-picker-single')
+    dcc.Graph(id='indicator-graphic')
+    #html.Div(id='output-container-date-picker-single')
     
     #html.H4(children='Clean Sites'),
     #generate_table(userdate)
 ])
             
 
-@app.callback(
-        dash.dependencies.Output('output-container-date-picker-single', 'children'),
-        dash.dependencies.Output('indicator-graphic', 'figure'),
+@app.callback(dash.dependencies.Output('indicator-graphic', 'figure'),
         [dash.dependencies.Input('datepicker', 'date')])
-#    dash.dependencies.Output(component_id='div-datepicker', 
-#                             component_property='children'),
-#    [dash.dependencies.Input(component_id='id-datepicker', 
-#                             component_property='date')]
 def update_graph(date):
+    print(date)
     date = pd.to_datetime(date)
     df1 = CleanSites(date)
     trace = go.Bar(
@@ -175,8 +171,8 @@ def update_graph(date):
                     
                     #mode='markers',
                     opacity=0.6,
-                    orientation='h',
-                    marker=dict(color=colors)#,
+                    orientation='h')
+                    #marker=dict(color=colors)#,
                                 #line = dict(
                                 #        color = colors,
                                 #        width = 1))
@@ -186,7 +182,7 @@ def update_graph(date):
                     #    'line': {'width': 0.5, 'color': 'white'}
                     #},
                     #name=i
-                ) #for i in df1.continent.unique()
+                 #for i in df1.continent.unique()
     return {'data': trace,
             'layout': go.Layout(
                 yaxis={'title': 'Site'}, #'type': 'log',
