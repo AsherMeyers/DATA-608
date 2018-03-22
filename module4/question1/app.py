@@ -24,11 +24,8 @@ import plotly.graph_objs as go
 from colour import Color
 
 # Grab and scrub the data 
-df = pd.read_csv("https://raw.githubusercontent.com/AsherMeyers/DATA-608/master/module4/data.csv")
-
-# convert date strings to datetime objects
-df['Date'] = pd.to_datetime(df['Date'])
-
+df = pd.read_csv("https://raw.githubusercontent.com/AsherMeyers/DATA-608/master/module4/data.csv",
+                 index_col = "Date", parse_dates = True)
 
 # replace strings of counts with numerics
 df['EnteroCount'].replace(to_replace = "<10", value = 9, inplace = True)
@@ -43,66 +40,65 @@ df['EnteroCount'] = pd.to_numeric(df['EnteroCount'])
 # given date, it is unsafe.
 
 # Start and End of observations
-start = min(df.Date)
-end = max(df.Date)
+start = min(df.index)
+end = max(df.index)
 
 userdate = datetime.datetime(2013, 10, 1, 0, 0, 0)
 place = "Hudson above Mohawk River"
 
 def EnteroAvgCount(place, userdate):
+  
+    # In case user picks exactly the date of an observation
+    if userdate in df[df.Site == place].index: 
+        est = df[(df.Site == place) & (df.index == userdate)]["EnteroCount"]
+        #est = pd.to_numeric(est)
+        return est.values
+    
     # Identify closest two dates
     # last observation before user's selected date
+  
     try:
-        date1 = max(df.Date[(df.Site == place) & (df.Date <= userdate)]) 
+        date1 = max(df.index[(df.Site == place) & (df.index <= userdate)])
     except (ValueError):
-        date2 = min(df.Date[(df.Site == place) & (df.Date >= userdate)])
-        return df[(df.Site == place) & ((df.Date == date2))].EnteroCount.iloc[0]
+        date2 = min(df.index[(df.Site == place) & (df.index >= userdate)])        
+        return df[(df.Site == place) & ((df.index == date2))].EnteroCount.iloc[0]
     
     # first observation after user selected date
     try: 
-        date2 = min(df.Date[(df.Site == place) & (df.Date >= userdate)])
+        date2 = min(df.index[(df.Site == place) & (df.index >= userdate)])
     except (ValueError):
-        return df[(df.Site == place) & ((df.Date == date1))].EnteroCount.iloc[0]
+        return df[(df.Site == place) & ((df.index == date1))].EnteroCount.iloc[0]
     
-    
-    dff = df[(df.Site == place) & ((df.Date == date2) | (df.Date == date1))]
-    dff = dff.sort_values(by='Date')
+    dff = df[(df.Site == place) & ((df.index == date2) | (df.index == date1))]
+    dff = dff.sort_index()
     
     date1diff = abs((userdate - date1).days)
     date2diff = abs((userdate - date2).days)
     
-    # In case user picks exactly the date of an observation
-    if date1diff == 0:
-        return dff.EnteroCount.iloc[0]
-    elif date2diff == 0:
-        return dff.EnteroCount.iloc[1]
-    elif date2 == None:
-        return dff.EnteroCount.iloc[0]
+   
+    # Weights for  observations, based on proximity to user selected date
+    date1wt = date2diff/(date1diff + date2diff)
+    date2wt = date1diff/(date1diff + date2diff)
     
-    # Otherwise:
-    else:
-        # Weights for  observations, based on proximity to user selected date
-        date1wt = date2diff/(date1diff + date2diff)
-        date2wt = date1diff/(date1diff + date2diff)
-        
-        # Weights by number of samples for each observation
-        numSamples = dff.SampleCount.iloc[0] + dff.SampleCount.iloc[1]
-        sample1wt = dff.SampleCount.iloc[0]/numSamples
-        sample2wt = dff.SampleCount.iloc[1]/numSamples
-        
-        # Calculate weights by observation
-        obs1wt = date1wt * sample1wt
-        obs2wt = date2wt * sample2wt
-        
-        # Recalculate weights to add up to 1.
-        multiplier = 1/(obs1wt + obs2wt)
-        obs1wt *= multiplier
-        obs2wt *= multiplier
-        
-        # Estimated Count
-        est = dff.EnteroCount.iloc[0]*obs1wt + dff.EnteroCount.iloc[1]*obs2wt
-        
-        return est
+    # Weights by number of samples for each observation
+    numSamples = dff.SampleCount.iloc[0] + dff.SampleCount.iloc[1]
+    sample1wt = dff.SampleCount.iloc[0]/numSamples
+    sample2wt = dff.SampleCount.iloc[1]/numSamples
+    
+    # Calculate weights by observation
+    obs1wt = date1wt * sample1wt
+    obs2wt = date2wt * sample2wt
+    
+    # Recalculate weights to add up to 1.
+    multiplier = 1/(obs1wt + obs2wt)
+    obs1wt *= multiplier
+    obs2wt *= multiplier
+    
+    # Estimated Count
+    est = pd.to_numeric(dff.EnteroCount.iloc[0])*obs1wt + pd.to_numeric(dff.EnteroCount.iloc[1])*obs2wt
+    est = round(est,2)
+    
+    return est
     
 def CleanSites(userdate, n = 30):
     sites = df.Site.unique()
@@ -116,7 +112,7 @@ def CleanSites(userdate, n = 30):
     estimates = pd.DataFrame(data)
     cleans = estimates[estimates['EnteroCount'] < 30]
     cleans = cleans[['Site', 'EnteroCount']]
-    cleans.iloc[:,1] = round(cleans.iloc[:,1],2)
+    #cleans.iloc[:,1] = round(cleans.iloc[:,1],2)
     cleans.sort_values(by=['EnteroCount'], ascending=False, inplace = True)
     
     return cleans.tail(n)
@@ -125,12 +121,6 @@ def CleanSites(userdate, n = 30):
     
 def generate_table(userdate): #place
     
-    # Identify closest two dates
-    #date1 = max(df.Date[(df.Site == place) & (df.Date <= userdate)]) # last observation before user's selected date
-    #date2 = min(df.Date[(df.Site == place) & (df.Date >= userdate)]) # first observation after user selected date
-    
-    #dataframe = df[(df.Site == place) & ((df.Date == date2) | (df.Date == date1))]
-    #dataframe = dataframe.sort_values(by='Date')
     dataframe = CleanSites(userdate, n=75)
     
     return html.Table(
@@ -152,28 +142,33 @@ colorlist = list(orange.range_to(Color("blue"),len(df1)))
 colors = len(df1)*[None]
 for i in range(len(df1)): colors[i] = colorlist[i].hex_l
 
-app.layout = html.Div(children=[
-            dcc.DatePickerSingle(
-        id='id-datepicker',
+app.layout = html.Div([
+        dcc.DatePickerSingle(
+        id='datepicker',
         min_date_allowed=start,
         max_date_allowed=end,
-        initial_visible_month=dt(2010, 1, 1),
-        date=dt(2010, 1, 1)), 
-        html.Div(id='div-datepicker'),
-    html.H4(children='Clean Sites'),
-    generate_table(userdate)
+        initial_visible_month=pd.to_datetime("2010-1-1"),
+        date=pd.to_datetime("2010-1-1")), 
+        #html.Div(id='div-datepicker'),
+    #dcc.Graph(id='indicator-graphic'),
+    html.Div(id='output-container-date-picker-single')
+    
+    #html.H4(children='Clean Sites'),
+    #generate_table(userdate)
 ])
-
+            
 
 @app.callback(
-    dash.dependencies.Output(component_id='div-datepicker', 
-                             component_property='children'),
-    [dash.dependencies.Input(component_id='id-datepicker', 
-                             component_property='date')]
-)
-def update_output(date):
-    #date = dt.strptime(date, '%Y-%m-%d')
-    df1 = CleanSites(dt.strptime(date, '%Y-%m-%d'))
+        dash.dependencies.Output('output-container-date-picker-single', 'children'),
+        dash.dependencies.Output('indicator-graphic', 'figure'),
+        [dash.dependencies.Input('datepicker', 'date')])
+#    dash.dependencies.Output(component_id='div-datepicker', 
+#                             component_property='children'),
+#    [dash.dependencies.Input(component_id='id-datepicker', 
+#                             component_property='date')]
+def update_graph(date):
+    date = pd.to_datetime(date)
+    df1 = CleanSites(date)
     trace = go.Bar(
                     y=list(df1.Site),
                     x=list(df1.EnteroCount),
