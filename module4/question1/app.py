@@ -100,7 +100,7 @@ def EnteroAvgCount(place, userdate):
     
     return est
     
-def CleanSites(userdate, n = 30):
+def CleanSites(userdate, n = 15):
     sites = df.Site.unique()
     estimates = len(sites)*[None]
     for i in range(len(sites)):
@@ -138,10 +138,7 @@ df1 = CleanSites(userdate)
 
 app = dash.Dash()
 
-#orange = Color("orange")
-#colorlist = list(orange.range_to(Color("blue"),len(df1)))
-#colors = len(df1)*[None]
-#for i in range(len(df1)): colors[i] = colorlist[i].hex_l
+
 
 app.layout = html.Div([
         dcc.DatePickerSingle(
@@ -151,7 +148,7 @@ app.layout = html.Div([
         initial_visible_month=pd.to_datetime("2010-1-1"),
         date=pd.to_datetime("2010-1-1")), 
         #html.Div(id='div-datepicker'),
-    dcc.Graph(id='indicator-graphic')
+        dcc.Graph(id='indicator-graphic')
     #html.Div(id='output-container-date-picker-single')
     
     #html.H4(children='Clean Sites'),
@@ -162,17 +159,26 @@ app.layout = html.Div([
 @app.callback(dash.dependencies.Output('indicator-graphic', 'figure'),
         [dash.dependencies.Input('datepicker', 'date')])
 def update_graph(date):
-    print(date)
+    #print(date)
     date = pd.to_datetime(date)
     df1 = CleanSites(date)
+    
+    brown = Color("brown")
+    colorlist = list(brown.range_to(Color("blue"),30))
+    colors = len(df1)*[None]
+    for i in range(len(df1)): 
+        EnteroLevel = int(round(df1.EnteroCount.iloc[i],0))
+        colors[i] = colorlist[EnteroLevel].hex_l
+    
     trace = go.Bar(
-                    y=list(df1.Site),
-                    x=list(df1.EnteroCount),
-                    
-                    #mode='markers',
-                    opacity=0.6,
-                    orientation='h')
-                    #marker=dict(color=colors)#,
+                y=list(df1.Site),
+                x=list(df1.EnteroCount),
+                        
+                        #mode='markers',
+                opacity=0.6,
+                orientation='h',
+                marker=dict(color=colors)
+                )#,
                                 #line = dict(
                                 #        color = colors,
                                 #        width = 1))
@@ -183,14 +189,15 @@ def update_graph(date):
                     #},
                     #name=i
                  #for i in df1.continent.unique()
-    return {'data': trace,
+    return {'data': [trace],
             'layout': go.Layout(
                 yaxis={'title': 'Site'}, #'type': 'log',
                 xaxis={'title': 'Estimated Entero Count'},
-                margin={'l': 250, 'b': 40, 't': 10, 'r': 10},
+                margin={'l': 250, 'b': 40, 't': 30, 'r': 10},
                 legend={'x': 0, 'y': 1},
                 hovermode='closest',
-                font={'size':8}#,
+                font={'size':8},
+                title= 'Safe River Areas (Limit 15)' #,
                 #titlefont={'size':24}
             )
             }
