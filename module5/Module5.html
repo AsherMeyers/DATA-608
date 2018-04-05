@@ -10,11 +10,11 @@
 
 document.write('<p><i>Create a function to reverse any word that you type in. This can be typed into either an input box or an alert box, and then print the result in a box or on the webpage.</i></p>');
 function flip(Word){
-  var letters = Word.split();
+  var letters = Word.split("");
 
   var reversedLetters = letters.reverse();
 
-  var reversedWord = reversedLetters.join();
+  var reversedWord = reversedLetters.join("");
 
   return(reversedWord);
 }
@@ -33,30 +33,42 @@ function reverse(){
 <div id="target"></div>
 
 <h2>Segment 2: Multiples Printer</h2>
-
+<style>
+table, th, td {
+    border: 0.5px solid black;
+}
+</style>
 <script type="text/javascript">
+
+
 
 document.write('<p><i> Create a function that takes an input number, and prints a table with the first 20 multiples of the number, in order 5x4</i></p>');
 
-function mult(num){
-  <table>
-  <tr><td>num*1</td><td>num*2</td><td>num*3</td><td>num*4</td></tr>
-  <tr><td>num*5</td><td>6</td><td>num*7</td><td>num*8</td></tr>
-  <tr><td>num*9</td><td>num*10</td><td>num*11</td><td>num*12</td></tr>
-  <tr><td>num*13</td><td>num*14</td><td>num*15</td><td>num*16</td></tr>
-  <tr><td>num*17</td><td>num*18</td><td>num*19</td><td>num*20</td></tr>
-  </table>
-    return(str);
+function mult(num) {
+    var k; // counter
+    var tab; // table
+    for (k=1; k < 21; k++) {
+      if((k-1)%4 == 0){tab += "<tr><td>" + num*k + "</td>"}
+      else if(k%4 == 0) {tab += "<td>" + num*k + "</td></tr>"} else (tab += "<td>" + num*k + "</td>");
+    }
+tab = "<table>"+tab+"</table>"
+return(tab);
 };
 
 function calc(){
-    var t = document.getElementById("target");
-    t.innerHTML = mult(document.getElementById('num').value, 3);
+    var t2 = document.getElementById("target2");
+    t2.innerHTML = mult(document.getElementById('num').value);
 }
 </script>
+
 <p>
 <form>
     <input id="num" type="number" size="4">
     <input type="button" value="multiply" onClick="calc();">
 </form>
 </p>
+
+<div id="target2"></div>
+
+</body>
+</html>
