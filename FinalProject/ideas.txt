@@ -1,0 +1,28 @@
+What is the goal?
+
+Show pay distribution by city, part time, full time workers.
+
+drop down - select by city, county
+
+City payroll data:
+Search function for specific person's salary
+Distribution of pay, part time or full time employees
+gender balance
+
+
+City summary data:
+table
+non white % (or non-asian/white %) vs city employee compensation per resident, circle diameter by population size
+median pay and benefits vs race
+ 
+
+fig <- url %>%
+  read_html() %>%
+  html_nodes(xpath='//*[@id="qfcontent"]/div[4]') %>%
+  html_table()
+
+
+
+
+
+compare cities by residential
