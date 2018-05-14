@@ -38,4 +38,6 @@ For example, for LA we have a sum T of 102.20%, so we'd then divide each % above
 
 Methodological Notes:
 *San Francisco is both a city and a county, therefore TransparentCA's figures include the costs of both city and county functions. For the compensation cost per resident, TransparentCA lists a value of $5,039, from which I've subtracted LA County's cost per resident of $1,112, to estimate San Francisco's city (and not county) cost per resident at the difference, $3,927. I chose LA because I felt it most similar to SF, but counties neighboring SF have similar figures for compensation cost per resident, with a range of approximately 700-1,200.
-*Gender of staff is guessed by using the r package gender, which uses social security names data to gauge the probability of someone being a man or a woman.
+*Gender of staff is guessed by using the r package gender, which uses social security names data to gauge the probability of someone being a man or a woman. Only names with a 95%+ probability of being male or female had a gender assigned, i.e. gender-ambiguous names like Pat or Dana were not assigned genders. Of the 240k people filtered, 89%, or 215k, were assigned genders.
+*Todd Milan removed from payroll; $2m pay reflects lawsuit settlement.
+*People with pay below $10,000 (approximately half-time at minimum wage) were removed from the dataset. 
