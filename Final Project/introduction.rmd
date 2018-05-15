@@ -1,0 +1,53 @@
+
+#### Why I picked this topic
+California is in the throes of a housing crisis, with even the middle class unable to find housing they can afford in the cities where opportunity is greatest, such as San Francisco, Cupertino, Palo Alto and Los Angeles. One big contributor: city governments, at the behest of existing residents, severely limit the amount of housing growth, forcing some newcomers and children coming of age to ultimately remain with their parents, leave town, or become homeless. Local companies are increasingly concerned about how they can pay workers enough to afford housing, which may just push housing prices up further, if little to no additional housing is built.
+
+One possible contributing factor is public spending per capita - how much cities spend for each resident. Allowing more residents, especially those with children or lower (but not even necessarily 'low') incomes than existing residents may require a city to reduce spending per resident, pitting housing growth against maintaining the quality of public amenities, in the minds of some. In reality, cities have high fixed costs, and adding more residents can actually help them meet those obligations. 
+
+To that effect, I built a dashboard where one can select various criteria like demographic and income variables, and see how they relate to one another. US Census figures were used for this dashboard primarily.
+
+Additionally, I used data on individual city employee pay to assess the distribution of pay by gender. Each employee was assigned a gender based on his or her first name, provided that there was a 95%+ certainty that the name belonged to that gender, based on Social Security records for each name. This was done using the r package genderizer. The data for this dashboard was gleaned from TransparentCA. A boxplot, a barplot and a scatterplot are shown, along with selectors for job status (full vs part time) and city workforce size. 
+
+#### Defining Race & Ethnicity
+
+By the US Census's definitions, Hispanics/Latinos can be of any race, but this does not allow separation of groups for demographic comparison. For instance, here is the [Census breakdown for Los Angeles](https://www.census.gov/quickfacts/fact/table/losangelescitycalifornia/PST045217):
+
+Index | Group | % of Population 
+
+
+A	|	White	|	52.40%
+
+B	|	White, non-Hispanic	|	28.50%
+
+C	|	Asian	|	11.60%
+
+D	|	Black	|	9.00%
+
+E	|	Mixed Race	|	3.60%
+
+F	|	American Indian	|	0.70%
+
+G	|	Pacific Islander	|	0.20%
+
+H	|	Hispanic/Latino of any race	|	48.60%
+
+N   |   Sum of non-Hispanic/Latino | 53.60%
+
+T	|	Sum of B-H	|	102.20%
+
+L	|	Latino = Hispanic of Any Race / Sum T	|	47.6%
+
+For the purposes of this dashboard, I've defined Latino as Hispanic/Latino of any race, divided by the sum T, which is over 100% because respondents may have self-identified as both Latino and a race besides white. This is simply renormalizing sums to 100%. 
+
+For example, for LA we have a sum T of 102.20%, so we'd then divide each % above by 102.20%. That would yield a Latino population of 47.6% (48.60%/102.20%). This leads to a greater concordance with the survey results, versus calculating Latino populations as the balance remaining after other groups are subtracted, in this case 46.40% (100% - 53.60%). The difference is potentially more pronounced in cities with smaller Hispanic populations, as in Santa Monica, where normalizing obtains 15.92%, whereas the remainder is 15%, vs a survey result of 16.10% for Hispanic/Latino population.
+
+#### Methodological Notes
+*All data is from 2016
+
+*San Francisco is both a city and a county, therefore TransparentCA's figures include the costs of both city and county functions. For the compensation cost per resident, TransparentCA lists a value of $5,039, from which I've subtracted LA County's cost per resident of $1,112, to estimate San Francisco's city (and not county) cost per resident at the difference, $3,927. I chose LA because I felt it most similar to SF, but counties neighboring SF have similar figures for compensation cost per resident, with a range of approximately 700-1,200.
+
+*Gender of staff is guessed by using the r package gender, which uses social security names data to gauge the probability of someone being a man or a woman. Only names with a 95%+ probability of being male or female had a gender assigned, i.e. gender-ambiguous names like Pat or Dana were not assigned genders. Of the 240k people filtered, 89%, or 215k, were assigned genders.
+
+*Todd Milan removed from payroll, except the table tab; $2m pay reflects lawsuit settlement.
+
+*People with pay below $10,000 (approximately half-time at minimum wage) were removed from the dataset, including the table. 

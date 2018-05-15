@@ -1,0 +1,80 @@
+y=Crude.Rate, fill=-Crude.Rate)) + 
+      geom_bar(stat="identity") +  
+      ggtitle(plotTitle) + xlab("State") + 
+      ylab("Rate, per 100,000 born") + labs(fill = "Rate") + theme_classic() +
+      theme(axis.text.x = element_text(size=10)) + coord_fixed(ratio = 3) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      coord_cartesian(ylim = c(0, max(x$Crude.Rate)))
+
+, multiple = FALSE,
+                  selectize = TRUE, width = NULL, size = NULL
+
+https://www.census.gov/quickfacts/fact/table/adelantocitycalifornia/PST045216#viewtop
+
+p131
+
+
+ tabPanel(
+               title = "Salaries",
+               sidebarLayout(
+                 sidebarPanel(
+                   selectInput("county", h4("County"), 
+                               choices = list("Los Angeles" = 1,
+                                              "SF" = 2), selected = 1),
+                   textInput("name", h3("Employee Name"), value = "Enter Text")
+                 )
+               )
+             ),
+
+
+list(sort(unique(cities$County))
+
+compare cities
+
+color by county
+
+scatter plot
+
+    # Filter out counties, as needed
+    if (!("All Counties" %in% input$countyFilter)) {
+      x <- subset(cities, County %in% input$countyFilter)
+    }
+
+    ggplot(data = x, aes(x=x[crit1], y=x[crit2], fill=x[colorBy])) + 
+      geom_point() + 
+      ggtitle(plotTitle) + xlab(input$crit1) + 
+      ylab(input$crit2) + theme_classic() +
+      theme(axis.text.x = element_text(size=10)) + coord_fixed(ratio = 3) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      coord_cartesian(ylim = c(0, max(x[crit2])))
+
+
+input = list()
+
+input$crit1 = "Compensation Cost Per City Resident"
+
+crit1 =  "CompCostPerResident"
+
+crit2 = "povertyRate"
+
+colorBy = "bachelors"
+
+sizeBy = "population"
+
+x <- cities %>%
+  select(crit1, crit2, colorBy, sizeBy)
+
+names(cities)
+
+    ggplot(data = x, aes(x=x[crit1], y=x[crit2], fill=x[colorBy])) + 
+      geom_point(aes(size=x[sizeBy])) + xlab(input$crit1) + ylab(input$crit2) + 
+      scale_x_continuous(trans='log10')
+
+  output$hover_info <- renderPrint({
+    if(!is.null(input$plot_hover)){
+      hover=input$plot_hover
+      dist=sqrt((hover$x-mtcars$mpg)^2+(hover$y-mtcars$disp)^2)
+      cat("Weight (lb/1000)\n")
+      if(min(dist) < 3)
+        mtcars$wt[which.min(dist)]
+

@@ -1,0 +1,11 @@
+Many have speculated as to why residents, who tend to be whiter, wealthier and older than newcomers, object to new housing. Some common explanations, in no particular order:
+1. Self-enrichment: a scarcity of housing drives up the cost of housing, making their housing more valuable. However, this is a bit more complicated, since the underlying land may be even more valuable if it can house multiple homes, such as apartments or houses on smaller lots, and even in those cases, opposition still occurs.
+2. Objection to higher population density: most of these places are constructed around cars, and adding more drivers to the mix will tend to mean more congestion. Some may incorrectly equate greater density with greater crime.
+3. Disdain for people, especially those with less money, who live differently: apartments are sometimes seen, incorrectly as hotbeds of crime. The drought is another reason cited for putting up an economic wall around these cities, though new housing can be designed to use less water, with appropriate landscaping and fewer lawns.
+
+One idea I found attractive, was the ['Club NIMBY' explanation by Chris Bradford](https://www.citylab.com/equity/2016/02/nimbyism-define-club-chris-bradford/461946/). Bradford, citing the rhetoric of such opponents, sees a common pattern - that residents are concerned about neighborhood amenities, and how they might decline in quality if population increases. Say, crowding at public schools or parks, or an inability to get support from local city officials on public concerns. With the proper focus, cities could find ways to maintain these amenities for residents new and old alike, or at least ensure they don't fall below a reasonable standard.
+
+The data I use contains the average city spending per resident, which can be considered one index of 'neighborhood amenity.' 
+
+
+Of course, given the data I use, the dashboard I have built is relevant for many other topics concerning city finances. I just wanted to give a little personal context, of how I chose this idea.
